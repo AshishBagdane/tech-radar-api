@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <changeSet id="1" author="ashish.bagdane">
+    <createTable tableName="technology_changes">
+      <column name="id" type="uuid">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="technology_id" type="uuid">
+        <constraints nullable="false"/>
+      </column>
+      <column name="change_type" type="varchar(20)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="change_date" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="previous_value" type="varchar(500)"/>
+      <column name="new_value" type="varchar(500)"/>
+      <column name="changed_field" type="varchar(50)"/>
+    </createTable>
+
+    <addForeignKeyConstraint
+      baseTableName="technology_changes"
+      baseColumnNames="technology_id"
+      referencedTableName="technologies"
+      referencedColumnNames="id"
+      constraintName="fk_technology_changes_technology"/>
+
+    <createIndex tableName="technology_changes" indexName="idx_technology_changes_date">
+      <column name="change_date"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>

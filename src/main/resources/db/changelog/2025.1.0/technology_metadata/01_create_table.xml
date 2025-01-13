@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <changeSet id="1" author="ashish.bagdane">
+    <createTable tableName="technology_metadata">
+      <column name="technology_id" type="uuid">
+        <constraints nullable="false"/>
+      </column>
+      <column name="metadata_key" type="varchar(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="metadata_value" type="varchar(255)"/>
+    </createTable>
+
+    <addPrimaryKey
+      tableName="technology_metadata"
+      columnNames="technology_id, metadata_key"
+      constraintName="pk_technology_metadata"/>
+
+    <addForeignKeyConstraint
+      baseTableName="technology_metadata"
+      baseColumnNames="technology_id"
+      referencedTableName="technologies"
+      referencedColumnNames="id"
+      constraintName="fk_technology_metadata_technology"
+      onDelete="CASCADE"/>
+  </changeSet>
+</databaseChangeLog>
