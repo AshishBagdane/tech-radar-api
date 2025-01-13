@@ -68,6 +68,7 @@ Thumbs.db
 
 ### Docker ###
 docker-compose.override.yml
+data/
 
 ### Node (for Angular frontend) ###
 node_modules/
