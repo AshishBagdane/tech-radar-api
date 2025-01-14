@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum ChangeType {
-  ADDED, UPDATED, DELETED
+    ADDED, UPDATED, DELETED
 }

@@ -23,23 +23,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class BatchController {
 
-  private final BatchService batchService;
+    private final BatchService batchService;
 
-  @PostMapping
-  @Operation(summary = "Create multiple technologies in a batch")
-  public ResponseEntity<BatchOperationResponse> batchCreate(
-      @Valid @RequestBody BatchCreateRequest request) {
-    log.info("Processing batch create request for {} technologies",
-        request.getTechnologies().size());
-    return ResponseEntity.ok(batchService.createTechnologies(request));
-  }
+    @PostMapping
+    @Operation(summary = "Create multiple technologies in a batch")
+    public ResponseEntity<BatchOperationResponse> batchCreate(
+        @Valid @RequestBody BatchCreateRequest request) {
+        log.info("Processing batch create request for {} technologies",
+                 request.getTechnologies().size());
+        return ResponseEntity.ok(batchService.createTechnologies(request));
+    }
 
-  @PutMapping
-  @Operation(summary = "Update multiple technologies in a batch")
-  public ResponseEntity<BatchOperationResponse> batchUpdate(
-      @Valid @RequestBody BatchUpdateRequest request) {
-    log.info("Processing batch update request for {} technologies",
-        request.getTechnologies().size());
-    return ResponseEntity.ok(batchService.updateTechnologies(request));
-  }
+    @PutMapping
+    @Operation(summary = "Update multiple technologies in a batch")
+    public ResponseEntity<BatchOperationResponse> batchUpdate(
+        @Valid @RequestBody BatchUpdateRequest request) {
+        log.info("Processing batch update request for {} technologies",
+                 request.getTechnologies().size());
+        return ResponseEntity.ok(batchService.updateTechnologies(request));
+    }
 }

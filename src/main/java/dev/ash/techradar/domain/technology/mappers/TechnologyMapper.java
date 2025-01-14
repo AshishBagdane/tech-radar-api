@@ -13,17 +13,17 @@ import org.mapstruct.MappingTarget;
 )
 public interface TechnologyMapper {
 
-  @Mapping(target = "version", ignore = true)
-  @Mapping(target = "updatedAt", ignore = true)
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "createdAt", ignore = true)
-  Technology toEntity(CreateTechnologyRequest request);
+    @Mapping(target = "version", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    Technology toEntity(CreateTechnologyRequest request);
 
-  TechnologyResponse toResponse(Technology technology);
+    TechnologyResponse toResponse(Technology technology);
 
-  @Mapping(target = "version", ignore = true)
-  @Mapping(target = "updatedAt", ignore = true)
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "createdAt", ignore = true)
-  void updateEntity(@MappingTarget Technology technology, UpdateTechnologyRequest request);
+    @Mapping(target = "version", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    void updateEntity(@MappingTarget Technology technology, UpdateTechnologyRequest request);
 }

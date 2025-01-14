@@ -11,88 +11,90 @@ import dev.ash.techradar.domain.technology.entities.TechnologyChange;
 import dev.ash.techradar.domain.technology.enums.Quadrant;
 import dev.ash.techradar.domain.technology.enums.Ring;
 import dev.ash.techradar.domain.technology.repositories.TechnologyRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 class AnalyticsServiceImpl implements AnalyticsService {
 
-  private final TechnologyRepository technologyRepository;
-  private final TechnologyChangeRepository changeRepository;
+    private final TechnologyRepository technologyRepository;
 
-  @Override
-  @Transactional(readOnly = true)
-  public QuadrantMetricsResponse getQuadrantMetrics() {
-    List<Technology> technologies = technologyRepository.findAll();
+    private final TechnologyChangeRepository changeRepository;
 
-    Map<Quadrant, Integer> distribution = technologies.stream()
-        .collect(Collectors.groupingBy(
-            Technology::getQuadrant,
-            Collectors.collectingAndThen(Collectors.counting(), Long::intValue)
-        ));
+    @Override
+    @Transactional(readOnly = true)
+    public QuadrantMetricsResponse getQuadrantMetrics() {
+        List<Technology> technologies = technologyRepository.findAll();
 
-    QuadrantMetricsResponse response = new QuadrantMetricsResponse();
-    response.setDistributionByQuadrant(distribution);
-    response.setTotalTechnologies(technologies.size());
-    response.setLastUpdated(LocalDateTime.now());
+        Map<Quadrant, Integer> distribution = technologies.stream()
+            .collect(Collectors.groupingBy(
+                Technology::getQuadrant,
+                Collectors.collectingAndThen(Collectors.counting(), Long::intValue)
+            ));
 
-    return response;
-  }
+        QuadrantMetricsResponse response = new QuadrantMetricsResponse();
+        response.setDistributionByQuadrant(distribution);
+        response.setTotalTechnologies(technologies.size());
+        response.setLastUpdated(LocalDateTime.now());
 
-  @Override
-  @Transactional(readOnly = true)
-  public RingMetricsResponse getRingMetrics() {
-    List<Technology> technologies = technologyRepository.findAll();
+        return response;
+    }
 
-    Map<Ring, Integer> distribution = technologies.stream()
-        .collect(Collectors.groupingBy(
-            Technology::getRing,
-            Collectors.collectingAndThen(Collectors.counting(), Long::intValue)
-        ));
+    @Override
+    @Transactional(readOnly = true)
+    public RingMetricsResponse getRingMetrics() {
+        List<Technology> technologies = technologyRepository.findAll();
 
-    RingMetricsResponse response = new RingMetricsResponse();
-    response.setDistributionByRing(distribution);
-    response.setTotalTechnologies(technologies.size());
-    response.setLastUpdated(LocalDateTime.now());
+        Map<Ring, Integer> distribution = technologies.stream()
+            .collect(Collectors.groupingBy(
+                Technology::getRing,
+                Collectors.collectingAndThen(Collectors.counting(), Long::intValue)
+            ));
 
-    return response;
-  }
+        RingMetricsResponse response = new RingMetricsResponse();
+        response.setDistributionByRing(distribution);
+        response.setTotalTechnologies(technologies.size());
+        response.setLastUpdated(LocalDateTime.now());
 
-  @Override
-  @Transactional(readOnly = true)
-  public RadarChangesResponse getRecentChanges(
-      LocalDateTime since,
-      Quadrant quadrant,
-      Ring ring) {
+        return response;
+    }
 
-    List<TechnologyChange> changes = changeRepository.findRecentChanges(since, quadrant, ring);
+    @Override
+    @Transactional(readOnly = true)
+    public RadarChangesResponse getRecentChanges(
+        LocalDateTime since,
+        Quadrant quadrant,
+        Ring ring) {
 
-    List<TechnologyChangeResponse> changeResponses = changes.stream()
-        .map(this::mapToChangeResponse)
-        .toList();
+        List<TechnologyChange> changes = changeRepository.findRecentChanges(since, quadrant, ring);
 
-    RadarChangesResponse response = new RadarChangesResponse();
-    response.setChanges(changeResponses);
-    response.setFromDate(since);
-    response.setToDate(LocalDateTime.now());
-    response.setTotalChanges(changeResponses.size());
+        List<TechnologyChangeResponse> changeResponses = changes.stream()
+            .map(this::mapToChangeResponse)
+            .toList();
 
-    return response;
-  }
+        RadarChangesResponse response = new RadarChangesResponse();
+        response.setChanges(changeResponses);
+        response.setFromDate(since);
+        response.setToDate(LocalDateTime.now());
+        response.setTotalChanges(changeResponses.size());
 
-  private TechnologyChangeResponse mapToChangeResponse(TechnologyChange change) {
-    TechnologyChangeResponse response = new TechnologyChangeResponse();
-    response.setTechnologyId(change.getTechnology().getId());
-    response.setName(change.getTechnology().getName());
-    response.setChangeType(change.getChangeType());
-    response.setChangeDate(change.getChangeDate());
+        return response;
+    }
+
+    private TechnologyChangeResponse mapToChangeResponse(TechnologyChange change) {
+        TechnologyChangeResponse response = new TechnologyChangeResponse();
+        response.setTechnologyId(change.getTechnology().getId());
+        response.setName(change.getTechnology().getName());
+        response.setChangeType(change.getChangeType());
+        response.setChangeDate(change.getChangeDate());
 //        response.setChangedBy(change.getChangedBy());
-    return response;
-  }
+        return response;
+    }
 }

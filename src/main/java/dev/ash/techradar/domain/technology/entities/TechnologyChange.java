@@ -12,13 +12,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "technology_changes")
@@ -28,44 +29,44 @@ import lombok.ToString;
 @ToString(exclude = {"technology"})
 public class TechnologyChange {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  private UUID id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "technology_id")
-  private Technology technology;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "technology_id")
+    private Technology technology;
 
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
-  private ChangeType changeType;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ChangeType changeType;
 
-  @Column(nullable = false)
-  private LocalDateTime changeDate;
+    @Column(nullable = false)
+    private LocalDateTime changeDate;
 
-  private String previousValue;
+    private String previousValue;
 
-  private String newValue;
+    private String newValue;
 
-  @Column(length = 50)
-  private String changedField;
+    @Column(length = 50)
+    private String changedField;
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof TechnologyChange that)) {
+            return false;
+        }
+        // Using natural composite key
+        return technology != null && changeDate != null &&
+            technology.equals(that.technology) &&
+            changeDate.equals(that.changeDate);
     }
-    if (!(o instanceof TechnologyChange that)) {
-      return false;
-    }
-    // Using natural composite key
-    return technology != null && changeDate != null &&
-        technology.equals(that.technology) &&
-        changeDate.equals(that.changeDate);
-  }
 
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

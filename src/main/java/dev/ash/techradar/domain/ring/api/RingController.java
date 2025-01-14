@@ -24,25 +24,25 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Ring Management", description = "APIs for managing technology rings")
 public class RingController {
 
-  private final RingService ringService;
+    private final RingService ringService;
 
-  @GetMapping
-  @Operation(summary = "List all rings with their technologies")
-  public ResponseEntity<RingListResponse> getAllRings(
-      @Parameter(description = "Filter criteria for technologies")
-      @ModelAttribute TechnologyFilter filter) {
+    @GetMapping
+    @Operation(summary = "List all rings with their technologies")
+    public ResponseEntity<RingListResponse> getAllRings(
+        @Parameter(description = "Filter criteria for technologies")
+        @ModelAttribute TechnologyFilter filter) {
 
-    return ResponseEntity.ok(ringService.getAllRings(filter));
-  }
+        return ResponseEntity.ok(ringService.getAllRings(filter));
+    }
 
-  @GetMapping("/{ringType}/technologies")
-  @Operation(summary = "Get technologies for specific ring")
-  public ResponseEntity<RingTechnologyResponse> getTechnologiesForRing(
-      @Parameter(description = "Ring type (ADOPT, TRIAL, ASSESS, HOLD)")
-      @PathVariable Ring ringType,
-      @Parameter(description = "Filter criteria for technologies")
-      @ModelAttribute TechnologyFilter filter) {
+    @GetMapping("/{ringType}/technologies")
+    @Operation(summary = "Get technologies for specific ring")
+    public ResponseEntity<RingTechnologyResponse> getTechnologiesForRing(
+        @Parameter(description = "Ring type (ADOPT, TRIAL, ASSESS, HOLD)")
+        @PathVariable Ring ringType,
+        @Parameter(description = "Filter criteria for technologies")
+        @ModelAttribute TechnologyFilter filter) {
 
-    return ResponseEntity.ok(ringService.getTechnologiesForRing(ringType, filter));
-  }
+        return ResponseEntity.ok(ringService.getTechnologiesForRing(ringType, filter));
+    }
 }
