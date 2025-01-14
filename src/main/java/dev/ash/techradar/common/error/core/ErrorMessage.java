@@ -38,9 +38,9 @@ public class ErrorMessage {
             .code(errorCode.getCode())
             .error(errorCode.getCategory().getDescription())
             .message(errorCode.getDefaultMessage())
-            .path(context.path())
-            .traceId(context.traceId())
-            .details(context.attributes())
+            .path(context.getPath())
+            .traceId(context.getTraceId())
+            .details(context.getAttributes())
             .build();
     }
 }
