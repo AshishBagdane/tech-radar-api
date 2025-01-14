@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+      <includeMdcKeyName>correlationId</includeMdcKeyName>
+      <includeMdcKeyName>userId</includeMdcKeyName>
+      <includeMdcKeyName>quadrant</includeMdcKeyName>
+      <includeMdcKeyName>ring</includeMdcKeyName>
+      <customFields>{"app":"tech-radar","environment":"${ENVIRONMENT:-local}"}</customFields>
+    </encoder>
+  </appender>
+
+  <appender name="ASYNC_JSON_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="JSON_CONSOLE"/>
+    <queueSize>512</queueSize>
+    <discardingThreshold>0</discardingThreshold>
+    <includeCallerData>true</includeCallerData>
+  </appender>
+
+  <!-- Application Loggers -->
+  <logger name="dev.ash.techradar" level="${LOG_LEVEL:-INFO}" additivity="false">
+    <appender-ref ref="ASYNC_JSON_CONSOLE"/>
+  </logger>
+
+  <!-- Framework Loggers -->
+  <logger name="org.springframework" level="INFO" additivity="false">
+    <appender-ref ref="ASYNC_JSON_CONSOLE"/>
+  </logger>
+
+  <logger name="org.hibernate" level="INFO" additivity="false">
+    <appender-ref ref="ASYNC_JSON_CONSOLE"/>
+  </logger>
+
+  <root level="INFO">
+    <appender-ref ref="ASYNC_JSON_CONSOLE"/>
+  </root>
+</configuration>
