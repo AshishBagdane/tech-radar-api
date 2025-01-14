@@ -1,0 +1,259 @@
+# Default profile configuration - Only disabling observability features
+spring:
+  application:
+    name: tech-radar
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tech-radar
+    username: ${DB_USERNAME:tech}
+    password: ${DB_PASSWORD:radar}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 300000
+      pool-name: TechRadarHikariCP
+      connection-timeout: 20000
+      max-lifetime: 1200000
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          batch_size: 50
+          fetch_size: 50
+        order_inserts: true
+        order_updates: true
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    enabled: true
+    default-schema: public
+
+server:
+  port: 8080
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/plain
+    min-response-size: 1024
+
+# Only disabling advanced observability features
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+      base-path: /actuator
+  endpoint:
+    metrics:
+      enabled: false
+    prometheus:
+      enabled: false
+  metrics:
+    export:
+      prometheus:
+        enabled: false
+
+app:
+  cors:
+    allowed-origins: http://localhost:3000
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+    allowed-headers: "*"
+    max-age: 3600
+  security:
+    jwt:
+      secret: ${JWT_SECRET:your-256-bit-secret}
+      expiration: 86400000
+  cache:
+    ttl: 3600
+  metrics:
+    enabled: false
+
+---
+# Development Profile
+spring:
+  config:
+    activate:
+      on-profile: dev
+  jpa:
+    show-sql: true
+
+# Observability enabled for dev
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      group:
+        tech-radar:
+          include: database,application,memory,technologyData
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: tech-radar
+    export:
+      prometheus:
+        enabled: true
+
+opentelemetry:
+  trace:
+    enabled: true
+    sampler:
+      probability: 1.0
+
+logging:
+  level:
+    root: DEBUG
+    dev.ash.techradar: DEBUG
+    org.springframework: DEBUG
+    org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} [%X{traceId}] [%X{errorType}] - %msg%n"
+
+tech-radar:
+  health:
+    show-details: true
+    memory-threshold-percent: 80.0
+    min-technologies-count: 1
+
+app:
+  metrics:
+    enabled: true
+
+---
+# QA Profile
+spring:
+  config:
+    activate:
+      on-profile: qa
+  datasource:
+    url: jdbc:postgresql://qa-db:5432/tech_radar_db
+
+# Observability enabled for qa
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: tech-radar
+    export:
+      prometheus:
+        enabled: true
+
+opentelemetry:
+  trace:
+    enabled: true
+    sampler:
+      probability: 0.5
+
+logging:
+  level:
+    root: INFO
+    dev.ash.techradar: DEBUG
+    org.springframework: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} [%X{traceId}] [%X{errorType}] - %msg%n"
+
+tech-radar:
+  health:
+    show-details: true
+    memory-threshold-percent: 85.0
+    min-technologies-count: 1
+
+app:
+  cors:
+    allowed-origins: https://qa.techradar.com
+  metrics:
+    enabled: true
+
+---
+# Production Profile
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:postgresql://prod-db:5432/tech_radar_db
+    hikari:
+      maximum-pool-size: 50
+
+# Observability enabled for prod
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+      show-components: when-authorized
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: tech-radar
+    export:
+      prometheus:
+        enabled: true
+
+opentelemetry:
+  trace:
+    enabled: true
+    sampler:
+      probability: 0.1
+
+logging:
+  level:
+    root: WARN
+    dev.ash.techradar: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} [%X{traceId}] [%X{errorType}] - %msg%n"
+
+tech-radar:
+  health:
+    show-details: true
+    memory-threshold-percent: 90.0
+    min-technologies-count: 1
+
+app:
+  cors:
+    allowed-origins: https://techradar.com
+  security:
+    jwt:
+      secret: ${JWT_SECRET}
+      expiration: 43200000
+  cache:
+    ttl: 7200
+  metrics:
+    enabled: true
+
+server:
+  tomcat:
+    max-threads: 200
+    min-spare-threads: 20
+    max-connections: 10000
+    accept-count: 100

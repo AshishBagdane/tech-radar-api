@@ -51,8 +51,8 @@ hs_err_pid*
 **/build/
 
 ### Spring Boot ###
-**/application*.yml
-**/application*.properties
+**/application-*.yml
+**/application-*.properties
 
 ### OS generated files ###
 .DS_Store

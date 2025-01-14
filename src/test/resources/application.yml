@@ -1,0 +1,67 @@
+spring:
+
+  # H2 Database Configuration for Tests
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
+
+  # JPA Configuration for Tests
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+  # Disable Liquibase for Tests
+  liquibase:
+    enabled: false
+
+  # Disable Open Session in View
+  jpa.open-in-view: false
+
+# Server Configuration
+server:
+  port: 0 # Random port for parallel test execution
+
+# Logging Configuration for Tests
+logging:
+  level:
+    root: ERROR
+    dev.ash.techradar: DEBUG
+    org.springframework: WARN
+    org.hibernate: ERROR
+    # Show SQL statements and parameters
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+# Test-specific Application Properties
+app:
+  cors:
+    allowed-origins: http://localhost:3000
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+    allowed-headers: "*"
+    max-age: 3600
+  security:
+    jwt:
+      secret: test-secret-key-must-be-at-least-256-bits-long
+      expiration: 3600000 # 1 hour in milliseconds
+  cache:
+    ttl: 60 # 1 minute in seconds for faster testing
+  metrics:
+    enabled: false
+
+# Actuator Configuration for Tests
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
