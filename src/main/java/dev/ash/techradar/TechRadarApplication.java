@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @OpenAPIDefinition(info = @Info(
-    version = "2024.1.0-SNAPSHOT",
+    version = "2025.1.0-SNAPSHOT",
     title = "${spring.application.name}",
     summary = "APIs for Tech Radar"
 ))
@@ -21,8 +21,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 public class TechRadarApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(TechRadarApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(TechRadarApplication.class, args);
+    }
 
 }
