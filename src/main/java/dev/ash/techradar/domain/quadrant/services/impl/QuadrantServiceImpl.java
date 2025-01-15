@@ -9,7 +9,9 @@ import dev.ash.techradar.domain.technology.enums.Quadrant;
 import dev.ash.techradar.domain.technology.enums.Ring;
 import dev.ash.techradar.domain.technology.mappers.TechnologyMapper;
 import dev.ash.techradar.domain.technology.repositories.TechnologyRepository;
+import dev.ash.techradar.domain.technology.specifications.TechnologySpecificationBuilder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,8 @@ public class QuadrantServiceImpl implements QuadrantService {
     private final TechnologyRepository technologyRepository;
 
     private final TechnologyMapper technologyMapper;
+
+    private final TechnologySpecificationBuilder technologySpecificationBuilder;
 
     @Override
     public QuadrantListResponse getAllQuadrants(Optional<Ring> ringFilter) {
@@ -53,10 +57,10 @@ public class QuadrantServiceImpl implements QuadrantService {
         Optional<Ring> ringFilter,
         Optional<String> search
     ) {
-        List<Technology> technologies = technologyRepository.findByQuadrantAndFilters(
+        List<Technology> technologies = findByQuadrantAndFilters(
             quadrantType,
-            ringFilter.orElse(null),
-            search.orElse(null)
+            ringFilter,
+            search
         );
 
         QuadrantTechnologyResponse response = new QuadrantTechnologyResponse();
@@ -67,6 +71,16 @@ public class QuadrantServiceImpl implements QuadrantService {
         response.setTotalTechnologies(technologies.size());
 
         return response;
+    }
+
+    public List<Technology> findByQuadrantAndFilters(
+        Quadrant quadrantType,
+        Optional<Ring> ringFilter,
+        Optional<String> search) {
+        Specification<Technology> spec = technologySpecificationBuilder.buildQuadrantWithFiltersSpec(quadrantType,
+                                                                                                     ringFilter,
+                                                                                                     search);
+        return technologyRepository.findAll(spec);
     }
 
     private QuadrantSummaryResponse createQuadrantSummary(Quadrant quadrant, List<Technology> technologies) {

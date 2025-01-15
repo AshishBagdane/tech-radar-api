@@ -1,5 +1,6 @@
 package dev.ash.techradar.domain.ring.services.impl;
 
+import dev.ash.techradar.common.specifications.BaseSpecificationBuilder;
 import dev.ash.techradar.domain.ring.dtos.RingListResponse;
 import dev.ash.techradar.domain.ring.dtos.RingSummaryResponse;
 import dev.ash.techradar.domain.ring.dtos.RingTechnologyResponse;
@@ -10,6 +11,7 @@ import dev.ash.techradar.domain.technology.entities.Technology;
 import dev.ash.techradar.domain.technology.enums.Quadrant;
 import dev.ash.techradar.domain.technology.enums.Ring;
 import dev.ash.techradar.domain.technology.repositories.TechnologyRepository;
+import dev.ash.techradar.domain.technology.specifications.TechnologySpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,12 +58,9 @@ public class RingServiceImpl implements RingService {
 
     @Override
     public RingTechnologyResponse getTechnologiesForRing(Ring ringType, TechnologyFilter filter) {
-        List<Technology> technologies = technologyRepository.findByRingWithFilters(
+        List<Technology> technologies = findByRingWithFilters(
             ringType,
-            filter.getQuadrant(),
-            filter.getSearch(),
-            filter.getFromDate(),
-            filter.getToDate()
+            filter
         );
 
         RingTechnologyResponse response = new RingTechnologyResponse();
@@ -72,6 +71,22 @@ public class RingServiceImpl implements RingService {
         response.setTotalTechnologies(technologies.size());
 
         return response;
+    }
+
+    public List<Technology> findByRingWithFilters(Ring ring, TechnologyFilter filter) {
+        var specification = new BaseSpecificationBuilder<Technology>()
+            .with(ctx -> TechnologySpecifications.withRing(ring))  // Required parameter
+            .withIfPresent(filter.getQuadrant(),
+                           ctx -> TechnologySpecifications.withQuadrant(filter.getQuadrant()))
+            .withIfPresent(filter.getSearch(),
+                           ctx -> TechnologySpecifications.withSearch(filter.getSearch()))
+            .withIfPresent(filter.getFromDate(),
+                           ctx -> TechnologySpecifications.createdBetween(
+                               filter.getFromDate(),
+                               filter.getToDate()))
+            .build();
+
+        return technologyRepository.findAll(specification);
     }
 
     @Override
