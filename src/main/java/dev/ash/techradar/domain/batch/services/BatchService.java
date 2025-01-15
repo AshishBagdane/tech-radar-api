@@ -6,7 +6,7 @@ import dev.ash.techradar.domain.batch.dtos.BatchUpdateRequest;
 
 public interface BatchService {
 
-  BatchOperationResponse createTechnologies(BatchCreateRequest request);
+    BatchOperationResponse createTechnologies(BatchCreateRequest request);
 
-  BatchOperationResponse updateTechnologies(BatchUpdateRequest request);
+    BatchOperationResponse updateTechnologies(BatchUpdateRequest request);
 }

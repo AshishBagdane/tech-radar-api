@@ -1,0 +1,17 @@
+# prometheus.yml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'tech-radar'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'tech-radar-api:8080' ]  # Using container name instead of localhost
+    basic_auth:
+      username: ${PROMETHEUS_USER:-admin}  # Optional: if you have security enabled
+      password: ${PROMETHEUS_PASSWORD:-admin}  # Optional: if you have security enabled
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: [ 'prometheus:9090' ]  # Using container name for prometheus itself

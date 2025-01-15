@@ -1,10 +1,11 @@
 package dev.ash.techradar.domain.ring.dtos;
 
-import java.util.List;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class RingListResponse {
 
-  private List<RingSummaryResponse> rings;
+    private List<RingSummaryResponse> rings;
 }

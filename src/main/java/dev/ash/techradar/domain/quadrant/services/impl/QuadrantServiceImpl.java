@@ -9,75 +9,77 @@ import dev.ash.techradar.domain.technology.enums.Quadrant;
 import dev.ash.techradar.domain.technology.enums.Ring;
 import dev.ash.techradar.domain.technology.mappers.TechnologyMapper;
 import dev.ash.techradar.domain.technology.repositories.TechnologyRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class QuadrantServiceImpl implements QuadrantService {
 
-  private final TechnologyRepository technologyRepository;
-  private final TechnologyMapper technologyMapper;
+    private final TechnologyRepository technologyRepository;
 
-  @Override
-  public QuadrantListResponse getAllQuadrants(Optional<Ring> ringFilter) {
-    List<Technology> technologies = ringFilter
-        .map(technologyRepository::findByRing)
-        .orElseGet(technologyRepository::findAll);
+    private final TechnologyMapper technologyMapper;
 
-    Map<Quadrant, List<Technology>> techsByQuadrant = technologies.stream()
-        .collect(Collectors.groupingBy(Technology::getQuadrant));
+    @Override
+    public QuadrantListResponse getAllQuadrants(Optional<Ring> ringFilter) {
+        List<Technology> technologies = ringFilter
+            .map(technologyRepository::findByRing)
+            .orElseGet(technologyRepository::findAll);
 
-    List<QuadrantSummaryResponse> summaries = Arrays.stream(Quadrant.values())
-        .map(quadrant -> createQuadrantSummary(quadrant, techsByQuadrant.getOrDefault(quadrant, new ArrayList<>())))
-        .collect(Collectors.toList());
+        Map<Quadrant, List<Technology>> techsByQuadrant = technologies.stream()
+            .collect(Collectors.groupingBy(Technology::getQuadrant));
 
-    QuadrantListResponse response = new QuadrantListResponse();
-    response.setQuadrants(summaries);
-    return response;
-  }
+        List<QuadrantSummaryResponse> summaries = Arrays.stream(Quadrant.values())
+            .map(quadrant -> createQuadrantSummary(quadrant, techsByQuadrant.getOrDefault(quadrant, new ArrayList<>())))
+            .toList();
 
-  @Override
-  public QuadrantTechnologyResponse getTechnologiesByQuadrant(
-      Quadrant quadrantType,
-      Optional<Ring> ringFilter,
-      Optional<String> search
-  ) {
-    List<Technology> technologies = technologyRepository.findByQuadrantAndFilters(
-        quadrantType,
-        ringFilter.orElse(null),
-        search.orElse(null)
-    );
+        QuadrantListResponse response = new QuadrantListResponse();
+        response.setQuadrants(summaries);
+        return response;
+    }
 
-    QuadrantTechnologyResponse response = new QuadrantTechnologyResponse();
-    response.setQuadrantType(quadrantType);
-    response.setTechnologies(technologies.stream()
-        .map(technologyMapper::toResponse)
-        .collect(Collectors.toList()));
-    response.setTotalTechnologies(technologies.size());
+    @Override
+    public QuadrantTechnologyResponse getTechnologiesByQuadrant(
+        Quadrant quadrantType,
+        Optional<Ring> ringFilter,
+        Optional<String> search
+    ) {
+        List<Technology> technologies = technologyRepository.findByQuadrantAndFilters(
+            quadrantType,
+            ringFilter.orElse(null),
+            search.orElse(null)
+        );
 
-    return response;
-  }
+        QuadrantTechnologyResponse response = new QuadrantTechnologyResponse();
+        response.setQuadrantType(quadrantType);
+        response.setTechnologies(technologies.stream()
+                                     .map(technologyMapper::toResponse)
+                                     .toList());
+        response.setTotalTechnologies(technologies.size());
 
-  private QuadrantSummaryResponse createQuadrantSummary(Quadrant quadrant, List<Technology> technologies) {
-    Map<Ring, Integer> techsByRing = technologies.stream()
-        .collect(Collectors.groupingBy(
-            Technology::getRing,
-            Collectors.collectingAndThen(Collectors.counting(), Long::intValue)
-        ));
+        return response;
+    }
 
-    QuadrantSummaryResponse summary = new QuadrantSummaryResponse();
-    summary.setQuadrantType(quadrant);
-    summary.setTechnologiesByRing(techsByRing);
-    summary.setTotalTechnologies(technologies.size());
-    return summary;
-  }
+    private QuadrantSummaryResponse createQuadrantSummary(Quadrant quadrant, List<Technology> technologies) {
+        Map<Ring, Integer> techsByRing = technologies.stream()
+            .collect(Collectors.groupingBy(
+                Technology::getRing,
+                Collectors.collectingAndThen(Collectors.counting(), Long::intValue)
+            ));
+
+        QuadrantSummaryResponse summary = new QuadrantSummaryResponse();
+        summary.setQuadrantType(quadrant);
+        summary.setTechnologiesByRing(techsByRing);
+        summary.setTotalTechnologies(technologies.size());
+        return summary;
+    }
 }
