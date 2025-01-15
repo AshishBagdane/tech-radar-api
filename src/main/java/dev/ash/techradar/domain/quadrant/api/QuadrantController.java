@@ -8,7 +8,6 @@ import dev.ash.techradar.domain.technology.enums.Ring;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,23 +28,23 @@ public class QuadrantController {
 
     @GetMapping
     @Operation(summary = "List all quadrants with their technologies")
-    public ResponseEntity<QuadrantListResponse> getAllQuadrants(
+    public QuadrantListResponse getAllQuadrants(
         @RequestParam(required = false) Ring ring
     ) {
-        return ResponseEntity.ok(quadrantService.getAllQuadrants(Optional.ofNullable(ring)));
+        return quadrantService.getAllQuadrants(Optional.ofNullable(ring));
     }
 
     @GetMapping("/{quadrantType}/technologies")
     @Operation(summary = "Get technologies for specific quadrant")
-    public ResponseEntity<QuadrantTechnologyResponse> getTechnologiesByQuadrant(
+    public QuadrantTechnologyResponse getTechnologiesByQuadrant(
         @PathVariable Quadrant quadrantType,
         @RequestParam(required = false) Ring ring,
         @RequestParam(required = false) String search
     ) {
-        return ResponseEntity.ok(quadrantService.getTechnologiesByQuadrant(
+        return quadrantService.getTechnologiesByQuadrant(
             quadrantType,
             Optional.ofNullable(ring),
             Optional.ofNullable(search)
-        ));
+        );
     }
 }
