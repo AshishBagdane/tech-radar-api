@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,21 +27,21 @@ public class RingController {
 
     @GetMapping
     @Operation(summary = "List all rings with their technologies")
-    public ResponseEntity<RingListResponse> getAllRings(
+    public RingListResponse getAllRings(
         @Parameter(description = "Filter criteria for technologies")
         @ModelAttribute TechnologyFilter filter) {
 
-        return ResponseEntity.ok(ringService.getAllRings(filter));
+        return ringService.getAllRings(filter);
     }
 
     @GetMapping("/{ringType}/technologies")
     @Operation(summary = "Get technologies for specific ring")
-    public ResponseEntity<RingTechnologyResponse> getTechnologiesForRing(
+    public RingTechnologyResponse getTechnologiesForRing(
         @Parameter(description = "Ring type (ADOPT, TRIAL, ASSESS, HOLD)")
         @PathVariable Ring ringType,
         @Parameter(description = "Filter criteria for technologies")
         @ModelAttribute TechnologyFilter filter) {
 
-        return ResponseEntity.ok(ringService.getTechnologiesForRing(ringType, filter));
+        return ringService.getTechnologiesForRing(ringType, filter);
     }
 }

@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,19 +26,19 @@ public class BatchController {
 
     @PostMapping
     @Operation(summary = "Create multiple technologies in a batch")
-    public ResponseEntity<BatchOperationResponse> batchCreate(
+    public BatchOperationResponse batchCreate(
         @Valid @RequestBody BatchCreateRequest request) {
         log.info("Processing batch create request for {} technologies",
                  request.getTechnologies().size());
-        return ResponseEntity.ok(batchService.createTechnologies(request));
+        return batchService.createTechnologies(request);
     }
 
     @PutMapping
     @Operation(summary = "Update multiple technologies in a batch")
-    public ResponseEntity<BatchOperationResponse> batchUpdate(
+    public BatchOperationResponse batchUpdate(
         @Valid @RequestBody BatchUpdateRequest request) {
         log.info("Processing batch update request for {} technologies",
                  request.getTechnologies().size());
-        return ResponseEntity.ok(batchService.updateTechnologies(request));
+        return batchService.updateTechnologies(request);
     }
 }

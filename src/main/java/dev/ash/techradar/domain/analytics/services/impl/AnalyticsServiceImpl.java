@@ -6,6 +6,7 @@ import dev.ash.techradar.domain.analytics.dtos.RingMetricsResponse;
 import dev.ash.techradar.domain.analytics.dtos.TechnologyChangeResponse;
 import dev.ash.techradar.domain.analytics.repositories.TechnologyChangeRepository;
 import dev.ash.techradar.domain.analytics.services.AnalyticsService;
+import dev.ash.techradar.domain.analytics.specifications.TechnologyChangeSpecificationBuilder;
 import dev.ash.techradar.domain.technology.entities.Technology;
 import dev.ash.techradar.domain.technology.entities.TechnologyChange;
 import dev.ash.techradar.domain.technology.enums.Quadrant;
@@ -73,7 +74,7 @@ class AnalyticsServiceImpl implements AnalyticsService {
         Quadrant quadrant,
         Ring ring) {
 
-        List<TechnologyChange> changes = changeRepository.findRecentChanges(since, quadrant, ring);
+        List<TechnologyChange> changes = findRecentChanges(since, quadrant, ring);
 
         List<TechnologyChangeResponse> changeResponses = changes.stream()
             .map(this::mapToChangeResponse)
@@ -86,6 +87,15 @@ class AnalyticsServiceImpl implements AnalyticsService {
         response.setTotalChanges(changeResponses.size());
 
         return response;
+    }
+
+    public List<TechnologyChange> findRecentChanges(LocalDateTime since,
+                                                    Quadrant quadrant,
+                                                    Ring ring) {
+        var specification = TechnologyChangeSpecificationBuilder
+            .buildRecentChangesSpec(since, quadrant, ring, true);
+
+        return changeRepository.findAll(specification);
     }
 
     private TechnologyChangeResponse mapToChangeResponse(TechnologyChange change) {
