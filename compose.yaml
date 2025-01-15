@@ -1,0 +1,27 @@
+services:
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: tech-radar
+      POSTGRES_USER: tech
+      POSTGRES_PASSWORD: radar
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis-stack:
+    image: redis/redis-stack:latest
+    container_name: redis-stack
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data/redis
+
+volumes:
+  postgres_data:
+  redis_data:

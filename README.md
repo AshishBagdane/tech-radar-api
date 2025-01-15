@@ -15,8 +15,8 @@ The Tech Radar API service enables organizations to:
 
 ## Technology Stack
 
-- Java 17
-- Spring Boot 3.x
+- Java 21
+- Spring Boot 3.4.1
 - Spring Data JPA
 - PostgreSQL (for data persistence)
 - Lombok (for reducing boilerplate)
@@ -100,40 +100,168 @@ The Tech Radar API service enables organizations to:
 
 ### Prerequisites
 
-- JDK 17 or later
+- JDK 21 or later
 - Maven 3.8+
 - PostgreSQL 14+
 
-### Setup Instructions
+## Running the Tech Radar Application
 
-1. Clone the repository:
+This guide explains how to run the Tech Radar application using Spring Boot's
+Docker Compose support.
+
+### Prerequisites
+
+- Java 21 or later
+- Maven 3.8+
+- Docker and Docker Compose
+- Git
+
+## Setup and Running
+
+### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone git@github.com:AshishBagdane/tech-radar-api.git
 cd tech-radar-api
 ```
 
-2. Configure database properties in `application.yml`:
-
-```yaml
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/tech_radar
-    username: your_username
-    password: your_password
-```
-
-3. Build the project:
+### 2. Build the Application
 
 ```bash
-mvn clean install
+./mvnw clean package -DskipTests
 ```
 
-4. Run the application:
+### 3. Run the Application
+
+Simply run the application using Maven or Java:
 
 ```bash
-mvn spring-boot:run
+# Using Maven
+./mvnw spring-boot:run
+
+# OR using Java
+java -jar target/tech-radar-[version].jar
 ```
+
+Spring Boot will automatically:
+
+- Detect the `compose.yaml` file in the project root
+- Start PostgreSQL and Redis Stack containers
+- Configure all necessary environment variables
+- Start the application
+
+The application should be accessible at:
+
+- Application: http://localhost:8080
+- Redis Stack Manager: http://localhost:8001
+
+### 4. Verify Services
+
+Check if all services are running:
+
+```bash
+# Check running containers
+docker ps
+
+# Check application health
+curl http://localhost:8080/actuator/health
+```
+
+### 5. Stopping the Application
+
+When you stop the Spring Boot application (using Ctrl+C or any other method), it
+will automatically:
+
+- Stop the containers
+- Preserve the data volumes
+- Clean up the resources
+
+## Configuration
+
+### Default Properties
+
+```properties
+# Database
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=tech-radar
+DB_USERNAME=tech
+DB_PASSWORD=radar
+# Redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
+```
+
+### Data Persistence
+
+The configuration uses named volumes for data persistence:
+
+- `postgres_data`: PostgreSQL data
+- `redis_data`: Redis data
+
+Data will persist between restarts unless you explicitly remove the volumes.
+
+## Troubleshooting
+
+### 1. Port Conflicts
+
+If you see port conflict errors:
+
+```bash
+# Check what's using PostgreSQL port
+lsof -i :5432
+
+# Check what's using Redis ports
+lsof -i :6379
+lsof -i :8001
+```
+
+### 2. Container Issues
+
+```bash
+# View container logs
+docker logs tech-radar-postgres-1
+docker logs redis-stack
+
+# Check container status
+docker ps -a
+```
+
+### 3. Clean Start
+
+If you need to start fresh:
+
+```bash
+# Stop the application
+# Then remove containers and volumes
+docker compose down -v
+
+# Start the application again
+./mvnw spring-boot:run
+```
+
+### 4. Common Issues
+
+1. Database Connection:
+
+- Verify PostgreSQL container is running
+- Check logs for connection errors
+- Ensure correct credentials in application.properties
+
+2. Redis Connection:
+
+- Verify Redis Stack container is running
+- Check Redis Stack Manager at http://localhost:8001
+- Review Redis connection logs
+
+3. Volume Permissions:
+
+- If you see permission errors, you might need to clean up volumes:
+
+   ```bash
+   docker compose down -v
+   docker volume prune
+   ```
 
 ## Security Best Practices
 
