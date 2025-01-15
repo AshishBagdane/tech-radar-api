@@ -7,8 +7,11 @@ scrape_configs:
   - job_name: 'tech-radar'
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: [ 'host.docker.internal:8080' ]  # This allows Prometheus to access your local machine
+      - targets: [ 'tech-radar-api:8080' ]  # Using container name instead of localhost
+    basic_auth:
+      username: ${PROMETHEUS_USER:-admin}  # Optional: if you have security enabled
+      password: ${PROMETHEUS_PASSWORD:-admin}  # Optional: if you have security enabled
 
   - job_name: 'prometheus'
     static_configs:
-      - targets: [ 'localhost:9090' ]
+      - targets: [ 'prometheus:9090' ]  # Using container name for prometheus itself

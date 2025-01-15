@@ -1,4 +1,32 @@
 services:
+  # Backend API Service
+  tech-radar-api:
+    image: tech-radar:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=tech-radar
+      - DB_USERNAME=tech
+      - DB_PASSWORD=radar
+      - SPRING_DATA_REDIS_HOST=redis-stack
+      - SPRING_DATA_REDIS_PORT=6379
+      - MANAGEMENT_ENDPOINTS=health,metrics,prometheus
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis-stack:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - tech-radar-network
 
   postgres:
     image: postgres:latest
@@ -48,8 +76,6 @@ services:
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--web.enable-lifecycle'
-    extra_hosts:
-      - "host.docker.internal:host-gateway"  # This allows accessing the host machine
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy" ]

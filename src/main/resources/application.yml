@@ -43,11 +43,19 @@ management:
   endpoints:
     web:
       exposure:
-        include: ${MANAGEMENT_ENDPOINTS:health}
+        include: ${MANAGEMENT_ENDPOINTS:health,info,metrics,prometheus}
       base-path: ${MANAGEMENT_BASE_PATH:/actuator}
   endpoint:
     health:
-      show-details: ${HEALTH_DETAILS:never}
+      show-details: ${HEALTH_DETAILS:always}
+      show-components: ${HEALTH_COMPONENTS:always}
+      group:
+        tech-radar:
+          include: ${HEALTH_GROUPS:database,application,memory,technologyData}
+    metrics:
+      enabled: ${METRICS_ENABLED:true}
+    prometheus:
+      enabled: ${PROMETHEUS_ENABLED:true}
 
 app:
   cors:
