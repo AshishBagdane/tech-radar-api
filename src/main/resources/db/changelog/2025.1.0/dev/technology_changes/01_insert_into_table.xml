@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <!-- Technology Changes History -->
+  <changeSet id="mock-data-1" author="ashish.bagdane">
+    <insert tableName="technology_changes">
+      <column name="id" value="b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"/>
+      <column name="technology_id" value="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"/>
+      <column name="change_type" value="ADDED"/>
+      <column name="change_date" valueDate="CURRENT_TIMESTAMP"/>
+      <column name="changed_field" value="ring"/>
+      <column name="previous_value" value="TRIAL"/>
+      <column name="new_value" value="ADOPT"/>
+    </insert>
+
+    <insert tableName="technology_changes">
+      <column name="id" value="b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12"/>
+      <column name="technology_id" value="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15"/>
+      <column name="change_type" value="UPDATED"/>
+      <column name="change_date" valueDate="CURRENT_TIMESTAMP"/>
+      <column name="changed_field" value="ring"/>
+      <column name="previous_value" value="TRIAL"/>
+      <column name="new_value" value="HOLD"/>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>

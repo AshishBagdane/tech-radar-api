@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <!-- Technology Metadata -->
+  <changeSet id="mock-data-1" author="ashish.bagdane">
+    <insert tableName="technology_metadata">
+      <column name="technology_id" value="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"/>
+      <column name="metadata_key" value="version"/>
+      <column name="metadata_value" value="24.0.1"/>
+    </insert>
+
+    <insert tableName="technology_metadata">
+      <column name="technology_id" value="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"/>
+      <column name="metadata_key" value="website"/>
+      <column name="metadata_value" value="https://www.docker.com"/>
+    </insert>
+
+    <insert tableName="technology_metadata">
+      <column name="technology_id" value="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13"/>
+      <column name="metadata_key" value="version"/>
+      <column name="metadata_value" value="18.2.0"/>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>

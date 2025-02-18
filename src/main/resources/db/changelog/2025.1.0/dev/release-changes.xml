@@ -6,4 +6,8 @@
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
   <include file="db/changelog/2025.1.0/release-changes.xml"/>
+  <include file="db/changelog/2025.1.0/dev/technologies/01_insert_into_table.xml"/>
+  <include file="db/changelog/2025.1.0/dev/technology_metadata/01_insert_into_table.xml"/>
+  <include file="db/changelog/2025.1.0/dev/technology_changes/01_insert_into_table.xml"/>
+  <include file="db/changelog/2025.1.0/dev/audit_logs/01_insert_into_table.xml"/>
 </databaseChangeLog>

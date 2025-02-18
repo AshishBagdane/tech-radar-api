@@ -19,7 +19,7 @@
       <column name="entity_id" type="varchar(50)">
         <constraints nullable="false"/>
       </column>
-      <column name="changes" type="jsonb"/>
+      <column name="change_data" type="varchar2(1024)"/>
       <column name="timestamp" type="timestamp">
         <constraints nullable="false"/>
       </column>

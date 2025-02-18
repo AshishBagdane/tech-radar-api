@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <!-- Mock Technologies Data -->
+  <changeSet id="mock-data-1" author="ashish.bagdane">
+    <insert tableName="technologies">
+      <column name="id" value="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"/>
+      <column name="name" value="Docker"/>
+      <column name="description" value="Containerization platform"/>
+      <column name="quadrant" value="PLATFORMS"/>
+      <column name="ring" value="ADOPT"/>
+      <column name="created_at" valueDate="CURRENT_TIMESTAMP"/>
+      <column name="updated_at" valueDate="CURRENT_TIMESTAMP"/>
+      <column name="version" value="1"/>
+    </insert>
+
+    <insert tableName="technologies">
+      <column name="id" value="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12"/>
+      <column name="name" value="Kubernetes"/>
+      <column name="description" value="Container orchestration platform"/>
+      <column name="quadrant" value="PLATFORMS"/>
+      <column name="ring" value="TRIAL"/>
+      <column name="created_at" valueDate="CURRENT_TIMESTAMP"/>
+      <column name="updated_at" valueDate="CURRENT_TIMESTAMP"/>
+      <column name="version" value="1"/>
+    </insert>
+
+    <insert tableName="technologies">
+      <column name="id" value="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13"/>
+      <column name="name" value="React"/>
+      <column name="description" value="JavaScript library for building user interfaces"/>
+      <column name="quadrant" value="LANGUAGES_AND_FRAMEWORKS"/>
+      <column name="ring" value="ADOPT"/>
+      <column name="created_at" valueDate="CURRENT_TIMESTAMP"/>
+      <column name="updated_at" valueDate="CURRENT_TIMESTAMP"/>
+      <column name="version" value="1"/>
+    </insert>
+
+    <insert tableName="technologies">
+      <column name="id" value="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a14"/>
+      <column name="name" value="TDD"/>
+      <column name="description" value="Test Driven Development methodology"/>
+      <column name="quadrant" value="TECHNIQUES"/>
+      <column name="ring" value="ADOPT"/>
+      <column name="created_at" valueDate="CURRENT_TIMESTAMP"/>
+      <column name="updated_at" valueDate="CURRENT_TIMESTAMP"/>
+      <column name="version" value="1"/>
+    </insert>
+
+    <insert tableName="technologies">
+      <column name="id" value="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15"/>
+      <column name="name" value="Jenkins"/>
+      <column name="description" value="Continuous Integration/Continuous Deployment tool"/>
+      <column name="quadrant" value="TOOLS"/>
+      <column name="ring" value="HOLD"/>
+      <column name="created_at" valueDate="CURRENT_TIMESTAMP"/>
+      <column name="updated_at" valueDate="CURRENT_TIMESTAMP"/>
+      <column name="version" value="1"/>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <!-- Audit Logs -->
+  <changeSet id="mock-data-1" author="ashish.bagdane">
+    <insert tableName="audit_logs">
+      <column name="id" value="c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"/>
+      <column name="action" value="CREATE"/>
+      <column name="entity_type" value="Technology"/>
+      <column name="entity_id" value="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"/>
+      <column name="change_data" value='{"name": "Docker", "ring": "ADOPT", "quadrant": "PLATFORMS"}'/>
+      <column name="timestamp" valueDate="CURRENT_TIMESTAMP"/>
+      <column name="performed_by" value="system"/>
+      <column name="ip_address" value="127.0.0.1"/>
+    </insert>
+
+    <insert tableName="audit_logs">
+      <column name="id" value="c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12"/>
+      <column name="action" value="UPDATE"/>
+      <column name="entity_type" value="Technology"/>
+      <column name="entity_id" value="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15"/>
+      <column name="change_data" value='{"ring": {"old": "TRIAL", "new": "HOLD"}}'/>
+      <column name="timestamp" valueDate="CURRENT_TIMESTAMP"/>
+      <column name="performed_by" value="system"/>
+      <column name="ip_address" value="127.0.0.1"/>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>
