@@ -60,6 +60,7 @@ public class OpenApiConfig {
             .group("4_analytics")
             .packagesToScan("dev.ash.techradar.domain.analytics")
             .pathsToMatch("/api/v1/metrics/**")
+            .pathsToMatch("/api/v1/audit/**")
             .build();
     }
 
