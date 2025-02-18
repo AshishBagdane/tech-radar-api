@@ -12,28 +12,64 @@
   <groupId>dev.ash</groupId>
   <artifactId>tech-radar</artifactId>
   <version>2025.1.0-SNAPSHOT</version>
+
   <name>Tech Radar</name>
-  <description>API for Tech Radar</description>
-  <url />
+  <description>Technology Radar Management System</description>
+  <url>https://github.com/AshishBagdane/tech-radar-api</url>
+
   <licenses>
-    <license />
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+    </license>
   </licenses>
+
   <developers>
-    <developer />
+    <developer>
+      <id>owner</id>
+      <name>Ashish Bagdane</name>
+      <email>ashishbagdaneofficial@gmail.com</email>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+    </developer>
   </developers>
+
   <scm>
-    <connection />
-    <developerConnection />
-    <tag />
-    <url />
+    <connection>scm:git:git://github.com/AshishBagdane/tech-radar-api.git</connection>
+    <developerConnection>scm:git:ssh://github.com:AshishBagdane/tech-radar-api.git</developerConnection>
+    <url>https://github.com/AshishBagdane/tech-radar-api/tree/master</url>
+    <tag>HEAD</tag>
   </scm>
+
   <properties>
+    <!-- Existing properties -->
     <java.version>21</java.version>
     <spring-cloud.version>2024.0.0</spring-cloud.version>
     <mapstruct.version>1.5.5.Final</mapstruct.version>
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     <logstash-logback-encoder.version>7.3</logstash-logback-encoder.version>
+
+    <!-- Add versions for better maintenance -->
+    <openapi.version>2.7.0</openapi.version>
+    <postgresql.version>42.7.2</postgresql.version>
+    <junit-jupiter.version>5.10.2</junit-jupiter.version>
+    <testcontainers.version>1.19.6</testcontainers.version>
+
+    <!-- Build properties -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+
+    <!-- Plugin versions -->
+    <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
+    <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+    <maven-failsafe-plugin.version>3.2.5</maven-failsafe-plugin.version>
+    <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
   </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -144,6 +180,25 @@
       <artifactId>spring-boot-docker-compose</artifactId>
       <optional>true</optional>
     </dependency>
+    <!-- Testing Dependencies -->
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${testcontainers.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${testcontainers.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>${junit-jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <dependencyManagement>
     <dependencies>
@@ -193,6 +248,7 @@
           </compilerArgs>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -205,7 +261,77 @@
           </excludes>
         </configuration>
       </plugin>
+
+      <!-- Add JaCoCo for code coverage -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <excludes>
+            <exclude>lombok/**/*.class</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+
+      <!-- Surefire for unit tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+        <configuration>
+          <includes>
+            <include>**/*Test.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+
+      <!-- Failsafe for integration tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${maven-failsafe-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <spring.profiles.active>dev</spring.profiles.active>
+      </properties>
+    </profile>
+    <profile>
+      <id>prod</id>
+      <properties>
+        <spring.profiles.active>prod</spring.profiles.active>
+      </properties>
+    </profile>
+  </profiles>
 </project>
