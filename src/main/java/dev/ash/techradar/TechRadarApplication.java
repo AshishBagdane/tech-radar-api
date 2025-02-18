@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @OpenAPIDefinition(info = @Info(
@@ -18,7 +17,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 ))
 @EntityScan(basePackages = {"dev.ash.techradar"})
 @EnableJpaRepositories(basePackages = {"dev.ash.techradar"})
-@EnableJpaAuditing
 @EnableCaching
 @SpringBootApplication
 @Import(ObservabilityConfig.class)
